@@ -1,0 +1,32 @@
+version: '3.8'
+
+services:
+  # S3 호환 Object Storage
+  minio:
+    image: minio/minio:latest
+    container_name: local-minio
+    ports:
+      - "9000:9000" # API 포트
+      - "9001:9001" # 콘솔 포트
+    environment:
+      MINIO_ROOT_USER: "admin"
+      MINIO_ROOT_PASSWORD: "password123"
+    volumes:
+      - ./data/minio_root:/data
+    command: server --console-address ":9001" /data
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # (선택) 메타데이터 저장소용 Postgres (Airflow 운영용 DB가 필요할 경우 사용)
+  postgres:
+    image: postgres:13
+    container_name: local-postgres
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow_pass
+      POSTGRES_DB: airflow
+    ports:
+      - "5432:5432"
