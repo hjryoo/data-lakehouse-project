@@ -1,0 +1,19 @@
+# Orchestration
+apache-airflow==2.8.1
+
+# Compute
+pyspark==3.5.0
+pandas
+numpy
+
+# Storage & Network
+minio
+boto3
+s3fs
+aiohttp  # 비동기 수집용
+tenacity # 재시도(Backoff)용
+
+# Warehouse & Transform
+dbt-duckdb # 로컬 파일 기반 빠른 분석
+dbt-bigquery # 구글 클라우드 사용 시
+duckdb
